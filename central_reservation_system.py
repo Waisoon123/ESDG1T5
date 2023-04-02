@@ -219,6 +219,107 @@ def cancel_reservation():
 
 # ================ END Use Case 2: Customer Cancel Reservation ================
 
+# ================ Use Case 2b: Customer Make Reservation ================
+
+@app.route('/crs/create_reservation', methods=['POST'])
+def create_reservation():
+    if request.is_json:
+        try:
+            """ 
+            result:{
+                resDetail:{
+                    reservationID
+        "           custID
+                    startDate
+                    endDate
+                    productID
+                    quantity 
+                }
+                cusDetail:{
+                        custID
+                        name
+                        gender
+                        email
+                }
+            }
+             """
+            requestDetail = request.get_json()
+            reservationDetail = requestDetail["resDetail"]
+            customerDetail = requestDetail["cusDetail"]
+            productID = reservationDetail["productID"]
+            # print("Received reservation detail: ", resDetail)
+
+            # Get product name
+            product_result = invoke_http(product_manager_URL +  "/id/" + str(productID), method="GET")
+            productName = product_result['data']['productName']
+
+            inventoryData = {
+                "productName": productName, 
+                "quantity": reservationDetail["quantity"]
+            }
+
+            if product_result["code"] not in range(200, 300):
+                return {
+                    "code": 500,
+                    "message": "Product does not exist"
+                }
+
+            # Creating reservation
+            reservation_result = invoke_http(reservation_manager_URL + "/create", method='POST', json=reservation_details)
+            print('Create reservation result: ' + reservation_result)
+
+            if reservation_result["code"] not in range(200, 300):
+                return {
+                    "code": 500,
+                    "message": "Reservation creation failed"
+                }
+
+            # Creating new customer
+            customer_result = invoke_http(customer_manager_URL + "/create", method='POST', json=customerDetail)
+            print('Create customer result: ' + customer_result)
+
+            if customer_result["code"] == 409:
+                return {
+                    "Code": 409,
+                    "message": "Customer already exist."
+                }
+            elif customer_result['code'] not in range(200, 300):
+                return {
+                    "code": 500,
+                    "message": "Customer creation failed"
+                }
+
+            #Updating Inventory
+            inventory_result = invoke_http(inventory_manager_URL  + "/update", method='POST', json=inventoryData)
+            print('Update inventory result: ' + inventory_result)
+
+            if inventory_result["code"] not in range(200, 300):
+                return {
+                    "code": 500,
+                    "message": "Inventory update failed"
+                }
+            
+            return {
+                "code": 201,
+                "data": {
+                    "reservation_result": reservation_result
+                    }
+                }
+
+
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+            print(ex_str)
+            return jsonify({
+                "code": 500,
+                "message": "CRS make reservation internal error: " + ex_str
+            }), 500
+
+# ================ END Use Case 2b: Customer Make Reservation ================
+
+
 # ================ Use Case 3: Customer Make Payment for Room Reservation ================
 @app.route("/crs/payment/<int:reservationID>", methods=["POST"])
 def make_payment(reservationID):

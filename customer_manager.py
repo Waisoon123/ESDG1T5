@@ -92,5 +92,46 @@ def create_customer():
         }
     ), 201
 
+@app.route("/customer_manager/create", methods=["POST"])
+def create_customer():
+    customerDetail = request.get_json()
+    custID = customerDetail["ID"]
+    customer = CustomerManager.query.filter_by(custID=custID).first()
+    if customer:
+        return jsonify(
+            {
+                "code": 409,
+                "data": "Customer already exist" + customer.json()
+            }
+        ), 409
+    
+    else:
+        newCust = CustomerManager(
+            custID = customerDetail['custID'],
+            name = customerDetail['name'],
+            gender = customerDetail['gender'],
+            email = customerDetail['email'],
+        )
+
+        try:
+            db.session.add(newCust)
+            db.session.commit()
+        except Exception as e:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while adding new Customer. " + str(e)
+                }
+            ), 500
+        
+        return jsonify(
+            {
+                "code": 201,
+                "data": customer.json()
+            }
+        ), 201
+
+
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5004, debug=True)

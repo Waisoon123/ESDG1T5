@@ -82,5 +82,36 @@ def delete_reservation(reservationID):
         }
     ), 404
 
+#Create reservation
+@app.route("/reservation_manager/create", methods=["POST"])
+def create_reservation():
+    reservationDetails = request.get_json()
+    reservation = ReservationManager(
+            reservationID = reservationDetails["reservationID"],
+            custID = reservationDetails["custID"],
+            startDate = reservationDetails["startDate"],
+            endDate = reservationDetails["endDate"],
+            productID = reservationDetails["productID"],
+            quantity = reservationDetails["quantity"]
+        )
+
+    try:
+        db.session.add(reservation)
+        db.session.commit()
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the reservation. " + str(e)
+            }
+        ), 500
+    
+    return jsonify(
+        {
+            "code": 201,
+            "data": reservation.json()
+        }
+    ), 201
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5003, debug=True)

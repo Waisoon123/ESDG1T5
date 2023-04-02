@@ -48,7 +48,7 @@ def get_all_inventory():
     return jsonify(
         {
             "code": 404,
-            "message": "There are no inventory."
+            "message": "There is no inventory."
         }
     ), 404
 

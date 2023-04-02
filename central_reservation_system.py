@@ -212,9 +212,20 @@ def cancel_reservation():
     print(payment_intent_id)
     reservation = invoke_http(reservation_manager_URL +  "/" + str(reservationID), method="DELETE")
     print(reservation)
-    ## process refund.
-    # get session_id from reservation manager
-    # return render_template('CheckInn_Index.html')
+
+    # Get custID from Reservation.
+    custID = reservation['data']['custID']
+    # Get customer name and email from Customer Manager based on custID.
+    customer = invoke_http(customer_manager_URL +  "/" + str(custID), method="GET")
+    customerName = customer['data']['name']
+    customerEmail = customer['data']['email']
+    # Format email.
+    subject = "Your reservation has been cancelled"
+    content = "Dear " + customerName + ",\n\nYour reservation has been cancelled and a refund is being processed.\n\nThank you."
+    # Send cancellation information to customer email. (notification microservice)
+    message = json.dumps({"customerEmail": customerEmail, "subject": subject, "content": content})
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="notify", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2))
     return redirect('http://localhost:5000/')
 
 # ================ END Use Case 2: Customer Cancel Reservation ================

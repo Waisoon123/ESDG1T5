@@ -153,8 +153,42 @@ def show_rooms():
     return render_template('Rooms_Query.html')
 # ================ END Use Case 1: Customer Browse Available Rooms ================
 
+# ================ Use Case 2: Customer Make Payment for Room Reservation ================
+@app.route("/crs/payment/<int:reservationID>", methods=["POST"])
+def make_payment(reservationID):
+    # Get custID, productID and quantity from Reservation Manager based on given reservationID.
+    reservation = invoke_http(reservation_manager_URL +  "/" + str(reservationID), method="GET")
+    custID = reservation['data']['custID']
+    productID = reservation['data']['productID']
+    quantity = reservation['data']['quantity']
+    # Get customer name and email from Customer Manager based on custID.
+    customer = invoke_http(customer_manager_URL +  "/" + str(custID), method="GET")
+    customerName = customer['data']['name']
+    customerEmail = customer['data']['email']
 
-# ================ Use Case 2: Customer Cancel Reservation ================
+    # Get productRate from Product Manager based on productID.
+    product = invoke_http(product_manager_URL +  "/id/" + str(productID), method="GET")
+    productRate = product['data']['productRate']
+    # Calculate total amount.
+    totalAmount = productRate * quantity
+    # Call payment microservice to make payment.
+
+
+    # If payment is successful, send email to customer.
+    subject = "Your payment for reservation"
+    content = "Dear " + customerName + ",\n\nYour payment of $" + str(totalAmount) + " is successful.\n\nThank you."
+    message = json.dumps({"customerEmail": customerEmail, "subject": subject, "content": content})
+    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="notify", 
+        body=message, properties=pika.BasicProperties(delivery_mode = 2))
+
+    # return output
+    return jsonify({
+        "data": totalAmount
+        }), 200
+
+# ================ END Use Case 2: Customer Make Payment for Room Reservation ================
+
+# ================ Use Case 3: Customer Cancel Reservation ================
 @app.route("/send_otp", methods=["POST"])
 def send_otp():
     reservationID = request.form['reservationID']
@@ -228,42 +262,7 @@ def cancel_reservation():
         body=message, properties=pika.BasicProperties(delivery_mode = 2))
     return redirect('http://localhost:5000/')
 
-# ================ END Use Case 2: Customer Cancel Reservation ================
-
-# ================ Use Case 3: Customer Make Payment for Room Reservation ================
-@app.route("/crs/payment/<int:reservationID>", methods=["POST"])
-def make_payment(reservationID):
-    # Get custID, productID and quantity from Reservation Manager based on given reservationID.
-    reservation = invoke_http(reservation_manager_URL +  "/" + str(reservationID), method="GET")
-    custID = reservation['data']['custID']
-    productID = reservation['data']['productID']
-    quantity = reservation['data']['quantity']
-    # Get customer name and email from Customer Manager based on custID.
-    customer = invoke_http(customer_manager_URL +  "/" + str(custID), method="GET")
-    customerName = customer['data']['name']
-    customerEmail = customer['data']['email']
-
-    # Get productRate from Product Manager based on productID.
-    product = invoke_http(product_manager_URL +  "/id/" + str(productID), method="GET")
-    productRate = product['data']['productRate']
-    # Calculate total amount.
-    totalAmount = productRate * quantity
-    # Call payment microservice to make payment.
-
-
-    # If payment is successful, send email to customer.
-    subject = "Your payment for reservation"
-    content = "Dear " + customerName + ",\n\nYour payment of $" + str(totalAmount) + " is successful.\n\nThank you."
-    message = json.dumps({"customerEmail": customerEmail, "subject": subject, "content": content})
-    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="notify", 
-        body=message, properties=pika.BasicProperties(delivery_mode = 2))
-
-    # return output
-    return jsonify({
-        "data": totalAmount
-        }), 200
-
-# ================ END Use Case 3: Customer Make Payment for Room Reservation ================
+# ================ END Use Case 3: Customer Cancel Reservation ================
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

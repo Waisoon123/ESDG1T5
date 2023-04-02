@@ -135,7 +135,7 @@ def list_rooms():
 
 
         # Read HTML file
-        with open('./html/Rooms_Query.html', 'r') as f:
+        with open('./static/Rooms_Query.html', 'r') as f:
             html = f.read()
 
         soup = BeautifulSoup(html, 'html.parser')
@@ -143,7 +143,7 @@ def list_rooms():
         output_div.clear()
         output_div.append(BeautifulSoup(div, 'html.parser'))
 
-        with open('./html/Rooms_Query.html', 'w') as f:
+        with open('./static/Rooms_Query.html', 'w') as f:
             f.write(str(soup))
 
         return redirect('/Rooms_Query.html')

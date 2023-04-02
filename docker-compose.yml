@@ -22,7 +22,7 @@ services:
   notification:
     build:
       context: ./
-      dockerfile: notification1.Dockerfile
+      dockerfile: notification.Dockerfile
     image: wenhai87/notification:esd
     restart: always
     depends_on:

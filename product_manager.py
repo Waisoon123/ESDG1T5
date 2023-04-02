@@ -89,7 +89,7 @@ def find_by_productID(productID):
     return jsonify(
         {
             "code": 404,
-            "message": "Product with Name {} not found.".format(productID)
+            "message": "Product with ID {} not found.".format(productID)
         }
     ), 404
 

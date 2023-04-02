@@ -70,7 +70,7 @@ create database reservation_manager;
 use reservation_manager;
 
 CREATE TABLE reservation_manager (
-    reservationID INT NOT NULL,
+    reservationID INT NOT NULL AUTO_INCREMENT,
     custID INT NOT NULL,
     startDate VARCHAR(256) NOT NULL,
     endDate VARCHAR(256) NOT NULL,

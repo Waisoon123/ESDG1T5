@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Bookings CheckOut</title>
+</head>
+<body>
+    <!-- Start of Internal CSS -->
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 18px;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            margin: 0;
+            padding: 10% 0;
+            position: relative;
+            min-height: 100vh;
+            background: #47abcd;
+            display: flex;
+            justify-content: center;
+                animation: fadein 5s;
+            animation-fill-mode: forwards;
+        }
+
+        .fadeIn {
+            animation: fadein 5s;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fadein {
+            from { opacity: 0; }
+            to   { opacity: 1; }
+        }
+
+        label {
+        display: block;
+        }
+        /* Model Container */
+
+        .model {
+        width: 900px;
+        background: #fff;
+        color: white;
+        position: relative;
+        animation-fill-mode: forwards;
+        }
+
+        @keyframes slideInFromLeft {
+        0% {
+            transform: translateY(-100%);
+        }
+        100% {
+            transform: translateX(0);
+        }
+        }
+
+        .room {
+        width: 50%;
+        height: 100%;
+        background: url(../Assets/r1.jpg) no-repeat center center;
+        background-size: cover;
+        display: inline-block;
+        vertical-align: top;
+        position: relative;
+        }
+
+        .text-cover {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 20px
+        }
+
+        .text-cover > * {
+        margin: 10px 0;
+        }
+
+        .text-cover h1 {
+        font-size: 1.8rem;
+        }
+
+        .text-cover .price {
+        color: #fff;
+        }
+
+        .text-cover .price span {
+        font-size: 1.4rem;
+        font-weight: 700;
+        }
+
+        .payment {
+        width: 50%;
+        height: 100%;
+        color: #242e5a;
+        display: inline-block;
+        }
+
+        .receipt-box {
+        padding: 20px 20px;
+        border-bottom: 4px solid #242e5a;
+        }
+
+        .receipt-box h3,
+        .payment-info h3 {
+        margin-bottom: 2rem;
+        }
+
+        .payment-info {
+        padding: 20px;
+        }
+
+
+        input[type=text]{
+            width: 100%;
+            padding: 8px 10px 10px;
+            margin: 15px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 1rem;
+        background-color: transparent;
+        }
+        
+        .table td {
+        font-size: 0.8rem;
+        font-style: italic;
+        padding: .25rem;
+        vertical-align: top;
+            
+        }
+
+
+.table td:nth-child(2) {
+  text-align: right;
+}
+    </style>
+    <!-- End of Internal CSS -->
+
+    <!-- Would need to get from Booking_Reservation Page after adding to cart -->
+    <!-- Code to get store and retrieve details from Booking_Reservation and present cart -->
+
+    <!-- Creating checkout page-->
+    <div class="model">
+        <div class="room">
+          <div class="text-cover">
+            <h1 name="roomName">Single Bed Room</h1>
+            <p class="price"> 129.00 <span>SGD</span> / Night</p>
+            <hr>
+            <!-- Dummy values need to be replaced-->
+            <p>Guests: 1</p>
+            <p>21/03 to 22/03 (Check in at 12:00 Noon)</p>
+          </div>
+        </div><div class="payment">
+          <div class="receipt-box">
+            <h3>Reciept Summary</h3>
+            <table class="table">
+              <tr>
+                <td>SGD 129 x 1 nights</td>
+                <td>129.00</td>
+              </tr>
+              <tr>
+                <td>Subtotal</td>
+                <td name="subTotal">129.00</td>
+              </tr>
+              <tr>
+                <td>Tax 8%</td>
+                <td name="tax">10.32</td>
+              </tr>
+              <tfoot>
+                <tr>
+                  <td>Sum</td>
+                  <td name="total">139.32</td>
+                </tr>
+              </tfoot>
+            <!-- End of Dummy Values that needs to be replaced -->
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <script>
+        var model = document.querySelector(".model");
+
+        function fadeIn () {
+        console.log('fadein')
+        model.className += " fadeIn";
+        }
+      </script>
+      
+</body>
+</html>

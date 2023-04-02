@@ -1,0 +1,108 @@
+<!-- Cart Page to show before linked to Stripe Payment Page -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>CheckInn</title>
+    
+        <!-- Start of CSS Bootstrap CDN section -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- End of CSS Bootstrap CDN section -->
+    
+        <!-- For Footer Icons-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+    
+    
+        <!-- Fontawesome CDN -->
+        <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+        <!-- End of Fontawesome CDN -->
+    
+        <!-- Link to stylesheet -->
+        <link rel="stylesheet" href="../static/styles.css">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./style/styles.css') }}">
+        <!-- End of Link to Stylesheet -->
+    
+    </head>
+<body>
+    
+    <div class="container">
+        <div class="header clearfix">
+          <nav>
+            <ul class="nav nav-pills float-right">
+              <li class="nav-item">
+                <a href="/" class="logo"> <img src="{{ url_for('static', filename='./images/Logo.png') }}" alt=""> </a> <!-- Changed -->
+              </li>
+            </ul>
+          </nav>
+          <h3 class="text-muted">CheckInn</h3>
+        </div>
+  
+        <div class="jumbotron">
+          <h2 class="display-3">Single Bed Room</h1>
+          <p class="lead">Your Stay Awaits You.</p>
+          <img src="{{ url_for('static', filename='./images/r2.jpg') }}" style="margin-bottom: 10px; height: 400px;">
+          <br>
+          <a href="#" id="buy_now_btn" class="btn btn-primary">Book Now</a>
+        </div>
+  
+        <script src="https://js.stripe.com/v3/"></script>
+        <script>
+          const checkout_public_key = '{{checkout_public_key}}';
+          const checkout_session_id = '{{checkout_session_id}}';
+        </script>
+        <script src="../static/style/script-ajax.js"></script> <!-- Changed -->
+  
+      </div>
+    
+
+    <!-- Footer Section -->
+    <div class="footer-clean" style="margin-top: 14%;">
+        <footer>
+            <div class="container">
+
+                <div class="row justify-content-center">
+
+                    <div class="col-sm-4 col-md-3 item">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="#">Gym Hours</a></li>
+                            <li><a href="#">Swimming Pool Hours</a></li>
+                            <li><a href="#">Spa & Massages</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="col-sm-4 col-md-3 item">
+                        <h3>About</h3>
+                        <ul>
+                            <li><a href="#">Boat Tours</a></li>
+                            <li><a href="#">Surfing Lessons</a></li>
+                            <li><a href="#">Diving & Smorking</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="col-sm-4 col-md-3 item">
+                        <h3>Careers</h3>
+                        <ul>
+                            <li><a href="#">Job openings</a></li>
+                            <li><a href="#">Employee success</a></li>
+                            <li><a href="#">Benefits</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3 item social">
+                    <a href="#"><i class="icon ion-social-facebook"></i></a>
+                    <a href="#"><i class="icon ion-social-twitter"></i></a>
+                    <a href="#"><i class="icon ion-social-snapchat"></i></a>
+                    <a href="#"><i class="icon ion-social-instagram"></i></a>
+                    <p class="copyright">CheckInn © 2023</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

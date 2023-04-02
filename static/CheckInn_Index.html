@@ -1,0 +1,326 @@
+<!-- Start of Booking Landing Page -->
+
+<!DOCTYPE html>
+<html lang="en">
+<!-- Header Declaration -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CheckInn</title>
+
+    <!-- Start of CSS Bootstrap CDN section -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- End of CSS Bootstrap CDN section -->
+
+    <!-- For Footer Icons-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+
+    <!-- Fontawesome CDN -->
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <!-- End of Fontawesome CDN -->
+
+    <!-- Link to stylesheet -->
+    <link rel="stylesheet" href="./style/styles.css">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='./style/styles.css') }}">
+    <!-- End of Link to Stylesheet -->
+
+</head>
+<!-- End of Header Declaration -->
+<body>
+    
+    <!-- NavBar Section -->
+    <header class="header" id="navigation-menu">
+        <div class="container">
+          <nav>
+            <a href="/" class="logo"> <img src="{{ url_for('static', filename='./images/Logo.png') }}" alt=""> </a> <!-- Changed -->
+    
+            <ul class="nav-menu">
+              <!-- <li> <a href="#home" class="nav-link">Home</a> </li> -->
+              <li> <a href="#room" class="nav-link">Rooms</a> </li>
+              <li> <a href="#service" class="nav-link">Services</a> </li>
+              <li> <a href="#reservation" class="nav-link">Reservations</a> </li>
+            </ul>
+    
+            <div class="hambuger">
+              <span class="bar"></span>
+              <span class="bar"></span>
+              <span class="bar"></span>
+            </div>
+          </nav>
+        </div>
+      </header>
+      <script>
+        const hambuger = document.querySelector('.hambuger');
+        const navMenu = document.querySelector('.nav-menu');
+    
+        hambuger.addEventListener("click", mobileMenu);
+    
+        function mobileMenu() {
+          hambuger.classList.toggle("active");
+          navMenu.classList.toggle("active");
+        }
+    
+        const navLink = document.querySelectorAll('.nav-link');
+        navLink.forEach((n) => n.addEventListener("click", closeMenu));
+    
+        function closeMenu() {
+          hambuger.classList.remove("active");
+          navMenu.classList.remove("active");
+        }
+      </script>
+    
+      <!-- Hero Section -->
+      <section class="home" id="home">
+        <div class="head_container">
+          <div class="box">
+            <div class="text">
+              <h1>Welcome.</h1>
+              <p>Welcome to <b>CheckInn</b>, the perfect destination for your next getaway. Our hotel offers luxurious accommodations, exceptional service, and a range of amenities to ensure that your stay is comfortable and enjoyable.</p>
+
+              <button>More Info</button>
+            </div>
+          </div>
+          <div class="image">
+            <img src="{{ url_for('static', filename='./images/home1.jpg') }}" class="slide">
+          </div>
+          <!-- <div class="image_item">
+            <img src="{{ url_for('static', filename='./images/home1.jpg') }}" alt="" class="slide active" onclick="changeImage('./images/home1.jpg')">
+            <img src="{{ url_for('static', filename='./images/home2.jpg') }}" alt="" class="slide" onclick="changeImage('./images/home2.jpg')">
+            <img src="{{ url_for('static', filename='./images/home3.jpg') }}" alt="" class="slide" onclick="changeImage('./images/home3.jpg')">
+            <img src="{{ url_for('static', filename='./images/home4.jpg') }}" alt="" class="slide" onclick="changeImage('./images/home4.jpg')">
+          </div> -->
+        </div>
+      </section>
+      <script>
+        function img(anything) {
+          document.querySelector('.slide').src = anything;
+        }
+    
+        function change(change) {
+          const line = document.querySelector('.image');
+          line.style.background = change;
+        }
+      </script>
+      <form action="http://localhost:5000/crs/get_rooms" method="get" id="date-form">
+        <section class="book">
+            <div class="container flex">
+                <div class="input grid">
+                    <div class="box">
+                        <label>Check-in:</label>
+                        <input type="date" placeholder="Check-in-Date" name="check_in_date" id="check-in-date">
+                    </div>
+                    <div class="box">
+                        <label>Check-out:</label>
+                        <input type="date" placeholder="Check-out-Date" name="check_out_date" id="check-out-date">
+                    </div>
+                </div>
+                <div class="search">
+                    <input type="submit" value="SEARCH">
+                </div>
+            </div>
+        </section>
+    </form>
+      <!-- End Of Hero Section -->
+
+      <!-- Start of Rooms Section -->
+      <section class="top" id="room">
+        <div class="container flex">
+          <div class="left">
+            <div class="img">
+              <img src="{{ url_for('static', filename='./images/a2.jpg') }}" alt="" class="image1">
+              <img src="{{ url_for('static', filename='./images/a1.jpg') }}" alt="" class="image2">
+            </div>
+          </div>
+          <div class="right">
+            <div class="heading">
+              <h5>Raising Your Expectations</h5>
+              <h2>Rooms at CheckInn Hotel Resort</h2>
+              <!-- Description of Luxury Single Type Room -->
+              <p>Indulge in the lavish comfort of a luxury single type room, where every detail has been carefully curated for a truly indulgent experience. With plush bedding, exquisite decor, and unparalleled amenities, you'll feel pampered and rejuvenated in this opulent oasis. </p>
+              <!-- Description of Luxury Double Type Room -->
+              <p>Unwind in the opulence of a luxury double type room, designed for the ultimate in comfort and relaxation. With two luxurious beds, lavish furnishings, and state-of-the-art amenities, you and your companion can bask in the lap of luxury and make memories that will last a lifetime.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End of Rooms Section -->
+      
+      <!-- Start Of Service -->
+      <section class="wrapper top" id="service">
+        <div class="container">
+          <div class="text">
+            <h2>Available Services</h2>
+            <p>At our hotel resort, we pride ourselves on providing exceptional service that goes above and beyond to exceed your every expectation. From personalized attention to impeccable attention to detail, our dedicated team is committed to ensuring your stay is as seamless and enjoyable as possible. </p>
+    
+            <div class="content">
+              <div class="box flex">
+                <i class="fas fa-swimming-pool"></i>
+                <span>Swimming pool</span>
+              </div>
+              <div class="box flex">
+                <i class="fas fa-dumbbell"></i>
+                <span>Gym & yogo</span>
+              </div>
+              <div class="box flex">
+                <i class="fas fa-spa"></i>
+                <span>Spa & massage</span>
+              </div>
+              <div class="box flex">
+                <i class="fas fa-ship"></i>
+                <span>Boat Tours</span>
+              </div>
+              <div class="box flex">
+                <i class="fas fa-swimmer"></i>
+                <span>Surfing Lessons</span>
+              </div>
+              <div class="box flex">
+                <i class="fas fa-microphone"></i>
+                <span>Conference room</span>
+              </div>
+              <div class="box flex">
+                <i class="fas fa-water"></i>
+                <span>Diving & smorking</span>
+              </div>
+              <div class="box flex">
+                <i class="fas fa-umbrella-beach"></i>
+                <span>Private Beach</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End Of Service Section -->
+      
+    
+    
+
+      <!-- Start of Reservations Section -->
+      <section class="reservation top" id="reservation">
+        <div class="container">
+          <div class="heading_top flex1">
+            <div class="heading">
+              <h5>A Paradise Staycation For You & Your Loved Ones</h5>
+              <h2>Rooms & Suites</h2>
+            </div>
+            <div class="button">
+              <button class="btn1"><a href="./Reservation_Browse.html">View All</a></button> <!-- Changed -->
+            </div>
+          </div>
+    
+          <div class="content grid">
+            <div class="box">
+              <div class="img">
+                <img src="{{ url_for('static', filename='./images/r1.jpg') }}" alt="">
+              </div>
+              <div class="text">
+                <h3>Single Bed Room</h3>
+                <p> <span>$</span>129 <span>/per night</span> </p>
+              </div>
+            </div>
+            <div class="box">
+              <div class="img">
+                <img src="{{ url_for('static', filename='./images/r2.jpg') }}" alt="">
+              </div>
+              <div class="text">
+                <h3>Double Bed Room</h3>
+                <p> <span>$</span>169 <span>/per night</span> </p>
+              </div>
+            </div>
+            <div class="box">
+              <div class="img">
+                <img src="{{ url_for('static', filename='./images/r3.jpg') }}" alt="">
+              </div>
+              <div class="text">
+                <h3>Luxury Double Bed Room</h3>
+                <p> <span>$</span>288 <span>/per night</span> </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- End of Reservation Section -->
+
+      <!-- Footer Section -->
+      <div class="footer-clean">
+        <footer>
+            <div class="container">
+
+                <div class="row justify-content-center">
+
+                    <div class="col-sm-4 col-md-3 item">
+                        <h3>Services</h3>
+                        <ul>
+                            <li><a href="#">Gym Hours</a></li>
+                            <li><a href="#">Swimming Pool Hours</a></li>
+                            <li><a href="#">Spa & Massages</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="col-sm-4 col-md-3 item">
+                        <h3>About</h3>
+                        <ul>
+                            <li><a href="#">Boat Tours</a></li>
+                            <li><a href="#">Surfing Lessons</a></li>
+                            <li><a href="#">Diving & Smorking</a></li>
+                        </ul>
+                    </div>
+
+
+                    <div class="col-sm-4 col-md-3 item">
+                        <h3>Careers</h3>
+                        <ul>
+                            <li><a href="#">Job openings</a></li>
+                            <li><a href="#">Employee success</a></li>
+                            <li><a href="#">Benefits</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-3 item social">
+                      <a href="#"><i class="icon ion-social-facebook"></i></a>
+                      <a href="#"><i class="icon ion-social-twitter"></i></a>
+                      <a href="#"><i class="icon ion-social-snapchat"></i></a>
+                      <a href="#"><i class="icon ion-social-instagram"></i></a>
+                      <p class="copyright">CheckInn © 2023</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+      </div>
+      <!-- End of Footer Section -->
+      <script>
+        const dateForm = document.getElementById('date-form');
+        const checkInDateInput = document.getElementById('check-in-date');
+        const checkOutDateInput = document.getElementById('check-out-date');
+    
+        function updateFormAction() {
+            const checkInDate = checkInDateInput.value;
+            const checkOutDate = checkOutDateInput.value;
+            const formAction = `http://localhost:5000/crs/get_rooms?check_in_date=${checkInDate}&check_out_date=${checkOutDate}`;
+            dateForm.action = formAction;
+        }
+    
+        checkInDateInput.addEventListener('input', updateFormAction);
+        checkOutDateInput.addEventListener('input', updateFormAction);
+    </script>
+    <!-- <script>
+      var images = ['./images/home1.jpg', './images/home2.jpg', './images/home3.jpg', './images/home4.jpg'];
+      
+      function changeImage(url) {
+          var img = document.querySelector('.slide.active');
+          img.src = url;
+          img.classList.remove('active');
+          
+          var nextImg = document.querySelector(`[src="${url}"]`).nextElementSibling;
+          if (!nextImg) {
+              nextImg = document.querySelector('.slide');
+          }
+          nextImg.classList.add('active');
+      }
+  </script> -->
+    </body>
+
+
+  </html>

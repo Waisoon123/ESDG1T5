@@ -1,0 +1,152 @@
+version: "3.8"
+
+volumes:
+  rabbitmq_data:
+
+services:
+  ###################################
+  # Payment: The Payment microservice
+  ###################################
+  # payment:
+  #   build:
+  #     context: ./
+  #     dockerfile: payment.Dockerfile
+  #   image: wenhai87/payment:esd
+  #   restart: always
+  #   environment:
+  #     PYTHONUNBUFFERED: 1
+
+  ###################################
+  # Notification: The Notification microservice
+  ###################################
+  notification:
+    build:
+      context: ./
+      dockerfile: notification1.Dockerfile
+    image: wenhai87/notification:esd
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+
+  ###################################
+  # Product: The Product microservice
+  ###################################
+  product:
+    build:
+      context: ./
+      dockerfile: product.Dockerfile
+    image: wenhai87/product:esd
+    restart: always
+    environment:
+      dbURL:  mysql+mysqlconnector://is213@host.docker.internal:3306/product_manager
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5001:5001"
+
+  ###################################
+  # Inventory: The Inventory microservice
+  ###################################
+  inventory:
+    build:
+      context: ./
+      dockerfile: inventory.Dockerfile
+    image: wenhai87/inventory:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/inventory_manager
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5002:5002"
+
+  ##################################
+  # Reservation: The Reservation microservice
+  ##################################
+  reservation:
+    build:
+      context: ./
+      dockerfile: reservation.Dockerfile
+    image: wenhai87/reservation:esd
+    restart: always
+    environment:
+      dbURL:  mysql+mysqlconnector://is213@host.docker.internal:3306/reservation_manager
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5003:5003"    
+
+  ##################################
+  # Customer: The Customer microservice
+  ##################################
+  customer:
+    build:
+      context: ./
+      dockerfile: customer.Dockerfile
+    image: wenhai87/customer:esd
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/customer_manager
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5004:5004" 
+
+  ###################################
+  # Refund: The Refund microservice
+  ###################################
+  refund:
+    build:
+      context: ./
+      dockerfile: refund.Dockerfile
+    image: wenhai87/refund:esd
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1
+    ports:
+      - "5005:5005"
+
+  ####################################
+  # RabbitMQ: The messaging broker   
+  ####################################
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  ###################################
+  # CRS: Central Reservation System microservice
+  ###################################
+  central_reservation_system:
+    build:
+      context: ./
+      dockerfile: central_reservation_system.Dockerfile
+    image: wenhai87/central_reservation_system:esd
+    restart: always
+    depends_on: 
+      # - payment
+      - refund
+      - inventory
+      - product
+      - customer
+      - reservation
+      - rabbitmq
+      - notification
+    environment:
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+      PYTHONUNBUFFERED: 1
+      product_manager_URL: http://product:5001/product_manager
+      inventory_manager_URL: http://inventory:5002/inventory_manager
+      reservation_manager_URL: http://reservation:5003/reservation_manager
+      customer_manager_URL: http://customer:5004/customer_manager
+      refund_URL: http://refund:5005/refund
+      # notification_URL: http://notification:5005/notification
+      # payment_URL: http://payment:5006/payment
+    ports:
+      - "5000:5000"

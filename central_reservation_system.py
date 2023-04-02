@@ -121,10 +121,15 @@ def list_rooms():
             div += f'<h4 class="p-date">{date}</h4>'
             for room_type, room_data in rooms.items(): # room_type = "Double Room", room_data = {"productRate": 200.0, "quantity": 150}
                 div += '<div class="product text-center col-lg-4 col-md-4 col-12">'
-                div += f'<img src="{url_for("static", filename="/images/Logo.png")}" alt="" class="img-fluid mb-3">'
+                if room_type == "Single Room":
+                    div += f'<img src="{url_for("static", filename="/images/r1.jpg")}" alt="" class="img-fluid mb-3">'
+                elif room_type == "Double Room":
+                    div += f'<img src="{url_for("static", filename="/images/r2.jpg")}" alt="" class="img-fluid mb-3">'
+                elif room_type == "Suite":
+                    div += f'<img src="{url_for("static", filename="/images/r3.jpg")}" alt="" class="img-fluid mb-3">'
                 div += f'<h5 class="p-name">{room_type}</h5>'
                 div += f'<h4 class="p-price">{room_data["productRate"]}</h4>'
-                div += '<button class="buy-btn"><a href="Booking_Cart.html">Add to Cart</a></button>'
+                div += '<button class="buy-btn"><a href="/Booking_Cart.html">Add to Cart</a></button>'
                 div += '</div>'
             div += '</div>'
 

@@ -27,7 +27,7 @@ User browses for available rooms within a specified date.
 
 ## Use Case 3
 User cancels a reservation.
-1. Open a browser and go to the url 'http://localhost:5000/Reservation_Details'.
+1. Open a browser and go to the url 'http://localhost:5000/Reservation_Details.html'.
 2. Type '1' into the input box and select 'Retrieve'. (Id of 1 is pre-defined in the database.)
 3. An OTP will be sent to your email specified during the initial setup. You will be redirected to another page to enter the OTP.
 4. When received, enter the OTP into the input box and select "Submit".

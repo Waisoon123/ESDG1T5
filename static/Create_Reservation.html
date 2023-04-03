@@ -46,8 +46,17 @@
                 <input type="text" class="form-control" id="customerName" aria-describedby="emailHelp" placeholder="Enter your full name">
                 <br><br>
                 <!-- Gender -->
-                <label for="customerGender">Gender</label>
-                <input type="text" class="form-control" id="customerGender" aria-describedby="emailHelp" placeholder="Type in 'M' or 'F'">
+                <!-- <input type="" class="form-control" id="customerGender" aria-describedby="emailHelp" placeholder="Type in 'M' or 'F'"> -->
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="customerGender">Gender</label>
+                    </div>
+                    <select class="custom-select" id="customerGender">
+                      <option selected>Choose...</option>
+                      <option value="1">M</option>
+                      <option value="2">F</option>
+                    </select>
+                </div>
                 <br><br>
                 <!-- Email -->
                 <label for="customerEmail">Email</label>
@@ -62,8 +71,17 @@
                 <input type="date" class="form-control" id="customerEmail" aria-describedby="emailHelp">
                 <br><br>
                 <!-- productName -->
-                <label for="prodName">Product Name</label>
-                <input type="text" class="form-control" id="prodName" aria-describedby="emailHelp" placeholder="Key in Room Type">
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <label class="input-group-text" for="customerGender">Product Name</label>
+                    </div>
+                    <select class="custom-select" id="customerGender">
+                      <option selected>Choose...</option>
+                      <option value="1">Single Bed Room</option>
+                      <option value="2">Double Bed Room</option>
+                      <option value="2">Luxury Bed Room</option>
+                    </select>
+                </div>
                 <br><br>
                 <!-- quantity -->
                 <label for="customerQty">Quantity</label>

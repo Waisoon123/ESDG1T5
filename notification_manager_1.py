@@ -11,7 +11,7 @@ from email.mime.multipart import MIMEMultipart
 
 monitorBindingKey='notify'
 
-def receiveError():
+def receiveNotification():
     amqp_setup.check_setup()
     
     queue_name = "Notify"  
@@ -54,4 +54,4 @@ def callback(channel, method, properties, body): # required signature for the ca
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')    
     print("\nThis is " + os.path.basename(__file__), end='')
     print(": monitoring routing key '{}' in exchange '{}' ...".format(monitorBindingKey, amqp_setup.exchangename))
-    receiveError()
+    receiveNotification()

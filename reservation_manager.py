@@ -92,7 +92,8 @@ def create_reservation():
             startDate = reservationDetails["startDate"],
             endDate = reservationDetails["endDate"],
             productID = reservationDetails["productID"],
-            quantity = reservationDetails["quantity"]
+            quantity = reservationDetails["quantity"],
+            session_id = None
         )
 
     try:

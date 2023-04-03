@@ -247,42 +247,40 @@ def create_reservation():
             reservationDetail = requestDetail["resDetail"]
             customerDetail = requestDetail["cusDetail"]
             productID = reservationDetail["productID"]
+
             # print("Received reservation detail: ", resDetail)
 
             # Get product name
             product_result = invoke_http(product_manager_URL +  "/id/" + str(productID), method="GET")
-            productName = product_result['data']['productName']
-
-            inventoryData = {
-                "productName": productName, 
-                "quantity": reservationDetail["quantity"]
-            }
 
             if product_result["code"] not in range(200, 300):
                 return {
                     "code": 500,
                     "message": "Product does not exist"
                 }
-
+            
+            productName = product_result['data']['productName']
             # Creating reservation
-            reservation_result = invoke_http(reservation_manager_URL + "/create", method='POST', json=reservation_details)
-            print('Create reservation result: ' + reservation_result)
+            reservation_result = invoke_http(reservation_manager_URL + "/create", method='POST', json=reservationDetail)
 
             if reservation_result["code"] not in range(200, 300):
                 return {
                     "code": 500,
-                    "message": "Reservation creation failed"
+                    "message": "Reservation creation failed",
+                    "data": reservationDetail
                 }
 
             # Creating new customer
-            customer_result = invoke_http(customer_manager_URL + "/create", method='POST', json=customerDetail)
-            print('Create customer result: ' + customer_result)
+            customer_result = invoke_http(customer_manager_URL, method='POST', json=customerDetail)
+            print(customer_result)
 
             if customer_result["code"] == 409:
-                return {
-                    "Code": 409,
-                    "message": "Customer already exist."
-                }
+                # return {
+                #     "Code": 409,
+                #     "message": "Customer already exist.",
+                #     "data": customerDetail
+                # }
+                pass
             elif customer_result['code'] not in range(200, 300):
                 return {
                     "code": 500,
@@ -290,13 +288,19 @@ def create_reservation():
                 }
 
             #Updating Inventory
+            inventoryData = {
+                "productName": productName, 
+                "quantity": reservationDetail["quantity"]
+            }
+
             inventory_result = invoke_http(inventory_manager_URL  + "/update", method='POST', json=inventoryData)
-            print('Update inventory result: ' + inventory_result)
+            print(inventory_result)
 
             if inventory_result["code"] not in range(200, 300):
                 return {
                     "code": 500,
-                    "message": "Inventory update failed"
+                    "message": "Inventory update failed",
+                    "data": inventoryData
                 }
             
             return {

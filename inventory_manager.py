@@ -74,7 +74,7 @@ def find_by_date_and_productName(date, productName):
     ), 404
 
 
-@app.route("/inventory_manager/update", methods=['UPDATE'])
+@app.route("/inventory_manager/update", methods=['POST'])
 def update_inventory():
     updateDetail = request.get_json()
     productName = updateDetail['productName']
@@ -82,7 +82,7 @@ def update_inventory():
 
     productInventory = InventoryManager.query.filter_by(productName=productName).first()
     if productInventory:
-        productInventory.quantity = quantity
+        productInventory.quantity -= quantity
         db.session.commit()
         return jsonify(
             {

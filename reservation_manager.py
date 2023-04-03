@@ -23,8 +23,8 @@ class ReservationManager(db.Model):
     quantity = db.Column(db.Integer, primary_key=True)
     session_id = db.Column(db.String(256),nullable=False)
 
-    def __init__(self, reservationID, custID, startDate, endDate, productID, quantity, session_id):
-        self.reservationID = reservationID
+    def __init__(self, custID, startDate, endDate, productID, quantity, session_id):
+        # self.reservationID = reservationID
         self.custID = custID
         self.startDate = startDate
         self.endDate = endDate
@@ -42,7 +42,7 @@ class ReservationManager(db.Model):
             "quantity": self.quantity,
             "session_id": self.session_id
         }
-      
+
 # Retrive custID/ProductID/Status by reservationID
 # Returns in the format of JSON.
 @app.route("/reservation_manager/<int:reservationID>")
@@ -61,7 +61,7 @@ def find_by_reservationID(reservationID):
             "message": "Reservation with ID {} not found.".format(reservationID)
         }
     ), 404
-  
+
 #Delete Reservation/Change status to "cancelled"
 @app.route("/reservation_manager/<int:reservationID>", methods=["DELETE"])
 def delete_reservation(reservationID):
@@ -81,6 +81,38 @@ def delete_reservation(reservationID):
             "message": "Reservation with ID {} not found.".format(reservationID)
         }
     ), 404
+
+#Create reservation
+@app.route("/reservation_manager/create", methods=["POST"])
+def create_reservation():
+    reservationDetails = request.get_json()
+    reservation = ReservationManager(
+            # reservationID = reservationDetails["reservationID"],
+            custID = reservationDetails["custID"],
+            startDate = reservationDetails["startDate"],
+            endDate = reservationDetails["endDate"],
+            productID = reservationDetails["productID"],
+            quantity = reservationDetails["quantity"],
+            session_id = None
+        )
+
+    try:
+        db.session.add(reservation)
+        db.session.commit()
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred while creating the reservation. " + str(e)
+            }
+        ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": reservation.json()
+        }
+    ), 201
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5003, debug=True)

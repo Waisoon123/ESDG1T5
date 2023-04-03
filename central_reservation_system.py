@@ -57,6 +57,9 @@ def reservation_details():
 @app.route("/verify_otp.html")
 def verification_otp():
     return render_template('verify_otp.html')
+@app.route("/create_reservation.html")
+def create_reservation():
+    return render_template('Create_Reservation.html')
 
 # ================ Use Case 1: Customer Browse Available Rooms ================
 # Get available rooms based on dates [fromDate, toDate].
@@ -153,38 +156,64 @@ def show_rooms():
     return render_template('Rooms_Query.html')
 # ================ END Use Case 1: Customer Browse Available Rooms ================
 
-# ================ Use Case 2: Customer Make Payment for Room Reservation ================
-@app.route("/crs/payment/<int:reservationID>", methods=["POST"])
-def make_payment(reservationID):
-    # Get custID, productID and quantity from Reservation Manager based on given reservationID.
-    reservation = invoke_http(reservation_manager_URL +  "/" + str(reservationID), method="GET")
-    custID = reservation['data']['custID']
-    productID = reservation['data']['productID']
-    quantity = reservation['data']['quantity']
-    # Get customer name and email from Customer Manager based on custID.
-    customer = invoke_http(customer_manager_URL +  "/" + str(custID), method="GET")
-    customerName = customer['data']['name']
-    customerEmail = customer['data']['email']
+# ================ Use Case 2: Customer Create Reservation ================
+@app.route("/crs/create_reservation", methods=["POST"])
+def crs_create_reservation():
+    # Name, gender, email, startDate, endDate for reservation, productName, quantity - UI for scenario 2
+    name = request.form['name']
+    gender = request.form['gender']
+    email = request.form['email']
+    startDate = request.form['startDate']
+    endDate = request.form['endDate']
+    productName = request.form['productName']
+    quantity = request.form['quantity']
+    print(startDate)
 
-    # Get productRate from Product Manager based on productID.
-    product = invoke_http(product_manager_URL +  "/id/" + str(productID), method="GET")
-    productRate = product['data']['productRate']
-    # Calculate total amount.
-    totalAmount = productRate * quantity
-    # Call payment microservice to make payment.
+    # create customer account.
+    customer = invoke_http(customer_manager_URL + "/create", method="POST", json={"name": name, "gender": gender, "email": email})
+    print(customer)
+    # get custID from customer manager.
+    customer = invoke_http(customer_manager_URL +  "/email/" + email, method="GET")
+    custID = customer['data']['custID']
+    # get productID from product manager.
+    product = invoke_http(product_manager_URL +  "/" + productName, method="GET")
+    productID = product['data']['productID']
+    # create reservation.
+    reservation = invoke_http(reservation_manager_URL + "/create", method="POST", json={"custID": custID, "productID": productID, "quantity": quantity, "startDate": startDate, "endDate": endDate})
+    # update quantity in inventory manager.
+    inventory = invoke_http(inventory_manager_URL +  "/update", method="PUT", json={"date":startDate, "productName":productName, "quantity": quantity})
+    # redirect to thanks page.
+    return redirect('/thanks.html')
+
+    # # Get custID, productID and quantity from Reservation Manager based on given reservationID.
+    # reservation = invoke_http(reservation_manager_URL +  "/" + str(reservationID), method="GET")
+    # custID = reservation['data']['custID']
+    # productID = reservation['data']['productID']
+    # quantity = reservation['data']['quantity']
+    # # Get customer name and email from Customer Manager based on custID.
+    # customer = invoke_http(customer_manager_URL +  "/" + str(custID), method="GET")
+    # customerName = customer['data']['name']
+    # customerEmail = customer['data']['email']
+
+    # # Get productRate from Product Manager based on productID.
+    # product = invoke_http(product_manager_URL +  "/id/" + str(productID), method="GET")
+    # productRate = product['data']['productRate']
+    # # Calculate total amount.
+    # totalAmount = productRate * quantity
+    # # Call payment microservice to make payment.
 
 
-    # If payment is successful, send email to customer.
-    subject = "Your payment for reservation"
-    content = "Dear " + customerName + ",\n\nYour payment of $" + str(totalAmount) + " is successful.\n\nThank you."
-    message = json.dumps({"customerEmail": customerEmail, "subject": subject, "content": content})
-    amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="notify", 
-        body=message, properties=pika.BasicProperties(delivery_mode = 2))
+    # # If payment is successful, send email to customer.
+    # subject = "Your payment for reservation"
+    # content = "Dear " + customerName + ",\n\nYour payment of $" + str(totalAmount) + " is successful.\n\nThank you."
+    # message = json.dumps({"customerEmail": customerEmail, "subject": subject, "content": content})
+    # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="notify", 
+    #     body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
-    # return output
-    return jsonify({
-        "data": totalAmount
-        }), 200
+    # # return output
+    # return jsonify({
+    #     "data": totalAmount
+    #     }), 200
 
 # ================ END Use Case 2: Customer Make Payment for Room Reservation ================
 

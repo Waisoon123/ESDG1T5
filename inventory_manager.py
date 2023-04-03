@@ -73,5 +73,35 @@ def find_by_date_and_productName(date, productName):
         }
     ), 404
 
+@app.route("/inventory_manager/update", methods=['PUT'])
+def update_inventory():
+    updateDetail = request.get_json()
+    date = updateDetail['date']
+    productName = updateDetail['productName']
+    quantity = updateDetail['quantity']
+
+    # update inventory where date and productName match.
+    Inventory = InventoryManager.query.filter_by(date=date, productName=productName).first()
+
+    # productInventory = InventoryManager.query.filter_by(productName=productName).first()
+    if Inventory:
+        inventory_quantity = Inventory.quantity
+        new_quantity = inventory_quantity - int(quantity)
+        Inventory.quantity = new_quantity
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "message": Inventory.json()
+            }
+        )
+
+    return jsonify(
+        {
+            "code": 404,
+            "message": f"Reservation with name {productName} not found."
+        }
+    ), 404
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5002, debug=True)

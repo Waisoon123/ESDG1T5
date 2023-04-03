@@ -20,8 +20,8 @@ class CustomerManager(db.Model):
     gender = db.Column(db.String(6), nullable=False)
     email = db.Column(db.String(256), nullable=False)
 
-    def __init__(self, custID, name, gender, email):
-        self.custID = custID
+    def __init__(self, name, gender, email):
+        # self.custID = custID
         self.name = name
         self.gender = gender
         self.email = email
@@ -53,44 +53,101 @@ def find_by_custID(custID):
         }
     ), 404
 
-# Create new customer.
-# Gets the data (custId, name, gender, email) from the request body.
-@app.route("/customer_manager", methods=["POST"])
-def create_customer():
-    if (CustomerManager.query.filter_by(custID=request.json["custID"]).first()):
+# Get customer by email.
+# Returns in the format of JSON.
+@app.route("/customer_manager/email/<string:email>")
+def find_by_email(email):
+    customer = CustomerManager.query.filter_by(email=email).first()
+    if customer:
         return jsonify(
             {
-                "code": 400,
-                "data": {
-                    "custID": request.json["custID"]
-                },
-                "message": "Customer with ID {} already exists.".format(request.json["custID"])
+                "code": 200,
+                "data": customer.json()
             }
-        ), 400
-
-    data = request.get_json()
-    customer = CustomerManager(**data)
-
-    try:
-        db.session.add(customer)
-        db.session.commit()
-    except:
-        return jsonify(
-            {
-                "code": 500,
-                "data": {
-                    "custID": data["custID"]
-                },
-                "message": "An error occurred while creating the customer."
-            }
-        ), 500
-
+        )
     return jsonify(
         {
-            "code": 201,
-            "data": customer.json()
+            "code": 404,
+            "message": "Customer with email {} not found.".format(email)
         }
-    ), 201
+    ), 404
+
+# Create new customer.
+# Gets the data (name, gender, email) from the request body.
+@app.route("/customer_manager/create", methods=["POST"])
+def create_customer():
+    customerDetail = request.get_json()
+    customer = CustomerManager.query.filter_by(email=customerDetail['email']).first()
+    if customer:
+        return jsonify(
+            {
+                "code": 409,
+                "data": "Customer already exist" + customer.json()
+            }
+        ), 409
+    else:
+        newCust = CustomerManager(
+            # custID = customerDetail['custID'],
+            name = customerDetail['name'],
+            gender = customerDetail['gender'],
+            email = customerDetail['email'],
+        )
+        try:
+            db.session.add(newCust)
+            db.session.commit()
+        except Exception as e:
+            return jsonify(
+                {
+                    "code": 500,
+                    "message": "An error occurred while adding new Customer. " + str(e)
+                }
+            ), 500
+
+        return jsonify(
+            {
+                "code": 201,
+                "data": customer.json()
+            }
+        ), 201
+
+# # Create new customer.
+# # Gets the data (custId, name, gender, email) from the request body.
+# @app.route("/customer_manager", methods=["POST"])
+# def create_customer():
+#     if (CustomerManager.query.filter_by(custID=request.json["custID"]).first()):
+#         return jsonify(
+#             {
+#                 "code": 400,
+#                 "data": {
+#                     "custID": request.json["custID"]
+#                 },
+#                 "message": "Customer with ID {} already exists.".format(request.json["custID"])
+#             }
+#         ), 400
+
+#     data = request.get_json()
+#     customer = CustomerManager(**data)
+
+#     try:
+#         db.session.add(customer)
+#         db.session.commit()
+#     except:
+#         return jsonify(
+#             {
+#                 "code": 500,
+#                 "data": {
+#                     "custID": data["custID"]
+#                 },
+#                 "message": "An error occurred while creating the customer."
+#             }
+#         ), 500
+
+#     return jsonify(
+#         {
+#             "code": 201,
+#             "data": customer.json()
+#         }
+#     ), 201
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5004, debug=True)

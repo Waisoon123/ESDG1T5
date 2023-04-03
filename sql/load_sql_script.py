@@ -63,6 +63,7 @@ insert into `inventory_manager` values('2023-03-11', 'Suite', 50);
 insert into `inventory_manager` values('2023-03-13', 'Single Room', 200);
 insert into `inventory_manager` values('2023-03-13', 'Double Room', 150);
 insert into `inventory_manager` values('2023-03-13', 'Suite', 50);
+insert into `inventory_manager` values('2023-04-03', 'Single Room', 50);
 
 # Reservation Manager Database
 drop database if exists reservation_manager;

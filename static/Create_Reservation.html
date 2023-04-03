@@ -39,11 +39,11 @@
     </style>
 
     <div class="container">
-        <form action="">
+        <form action="http://localhost:5000/crs/create_reservation" method="post">
             <div class="form-group">
                 <!-- Name -->
-                <label for="customerName">Name</label>
-                <input type="text" class="form-control" id="customerName" aria-describedby="emailHelp" placeholder="Enter your full name">
+                <label for="name">Name</label>
+                <input type="text" class="form-control" id="name" name="name" aria-describedby="emailHelp" placeholder="Enter your full name">
                 <br><br>
                 <!-- Gender -->
                 <!-- <input type="" class="form-control" id="customerGender" aria-describedby="emailHelp" placeholder="Type in 'M' or 'F'"> -->
@@ -59,16 +59,16 @@
                 </div>
                 <br><br>
                 <!-- Email -->
-                <label for="customerEmail">Email</label>
-                <input type="email" class="form-control" id="customerEmail" aria-describedby="emailHelp" placeholder="Key in your email address">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="Key in your email address">
                 <br><br>
                 <!-- startDate -->
                 <label for="startDate">startDate</label>
-                <input type="date" class="form-control" id="customerEmail" aria-describedby="emailHelp">
+                <input type="date" class="form-control" id="startDate" name="startDate" aria-describedby="emailHelp">
                 <br><br>
                 <!-- endDate -->
                 <label for="endDate">endDate</label>
-                <input type="date" class="form-control" id="customerEmail" aria-describedby="emailHelp">
+                <input type="date" class="form-control" id="endDate" name="endDate" aria-describedby="emailHelp">
                 <br><br>
                 <!-- productName -->
                 <div class="input-group mb-3">
@@ -84,12 +84,12 @@
                 </div>
                 <br><br>
                 <!-- quantity -->
-                <label for="customerQty">Quantity</label>
-                <input type="number" class="form-control" id="customerQty" aria-describedby="emailHelp" placeholder="">
+                <label for="quantity">Quantity</label>
+                <input type="number" class="form-control" id="quantity" name="quantity" aria-describedby="emailHelp" placeholder="">
                 <br><br>
             </div>
 
-            <button type="button" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
     

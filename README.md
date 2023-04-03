@@ -21,7 +21,9 @@ User browses for available rooms within a specified date.
 ### End of Use Case 1
 
 ## Use Case 2
-
+1. Navigate to ‘http://localhost:5000’ and select ‘Make Reservation’ in the top right nav bar.
+2. Fill in the details. Name, gender, email, start date (03-04-2023), end date (03-04-2023), room type (Single Room), and quantity (any number < 50). The specifics are due to the dummy data populated in the database.
+3. Select ‘Confirm’ to make the reservation.
 
 ### End of Use Case 2
 

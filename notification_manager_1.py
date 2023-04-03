@@ -31,12 +31,12 @@ def callback(channel, method, properties, body): # required signature for the ca
     # Set up the SMTP server details
     smtp_server = 'smtp.office365.com'
     smtp_port = 587
-    smtp_username = 'esdg1t5@outlook.com' # esdg1t5@outlook.com
+    smtp_username = 'esdg1t5_1@outlook.com' # esdg1t5@outlook.com
     smtp_password = '3sdg1T5@@@' # 3sdg1T5@@@
 
     # Set up the email message
     msg = MIMEMultipart()
-    msg['From'] = 'esdg1t5@outlook.com'
+    msg['From'] = 'esdg1t5_1@outlook.com'
     msg['To'] = customerEmail
     msg['Subject'] = subject
 

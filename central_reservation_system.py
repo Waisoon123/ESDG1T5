@@ -242,13 +242,13 @@ def cancel_reservation():
     reservationID = session['reservationID']
     reservation = invoke_http(reservation_manager_URL +  "/" + str(reservationID), method="GET")
     payment_intent_id = reservation['data']['session_id']
+    # Get custID from Reservation.
+    custID = reservation['data']['custID']
     refund = invoke_http(refund_URL +  "/" + str(payment_intent_id), method="POST")
     print(payment_intent_id)
     reservation = invoke_http(reservation_manager_URL +  "/" + str(reservationID), method="DELETE")
     print(reservation)
 
-    # Get custID from Reservation.
-    custID = reservation['data']['custID']
     # Get customer name and email from Customer Manager based on custID.
     customer = invoke_http(customer_manager_URL +  "/" + str(custID), method="GET")
     customerName = customer['data']['name']
